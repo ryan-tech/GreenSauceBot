@@ -1,7 +1,7 @@
 const { Client, GatewayIntentBits, Events } = require('discord.js');
 require('dotenv').config();
 const TOKEN = process.env.TOKEN;
-
+console.log(TOKEN)
 const { deployCommands } = require('./deploy-commands.js');
 const { pomodoroHandler } = require('./bot_modules/pomodoro.js');
 const { sayJoke, sayQuote, sayRiddle } = require('./bot_modules/everydayFun.js');

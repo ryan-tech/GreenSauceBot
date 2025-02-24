@@ -13,6 +13,9 @@ RUN npm install --production
 # Copy the rest of the application code
 COPY . .
 
+# Copy the .env file
+COPY .env .env
+
 # Install MongoDB Node.js driver
 RUN npm install mongodb
 

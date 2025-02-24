@@ -14,6 +14,8 @@ Ensure podman machine is running
 
 * `$ podman machine start`
 
-Run the deploy.bat (on windows only at the moment)
-
+To Deploy (on windows)
 * `$ deploy.bat`
+
+To run in cli
+* `$ npm run start`
