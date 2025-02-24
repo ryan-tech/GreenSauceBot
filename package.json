@@ -1,0 +1,27 @@
+{
+  "name": "greensaucebot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node bot.js",
+    "build": "podman build -t green-sauce-bot .",
+    "deploy": "./deploy.sh",
+    "podman-run": "podman run -d --name GreenSauceBot green-sauce-bot",
+    "podman-restart": "podman restart GreenSauceBot",
+    "mongo-start": "podman run -d --name mongo -p 27017:27017 mongo",
+    "mongo-stop": "podman stop mongo",
+    "mongo-logs": "podman logs mongo",
+    "logs": "podman logs greensaucebot",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.18.0",
+    "dotenv": "^16.4.7",
+    "everyday-fun": "^1.1.0",
+    "mongodb": "^4.17.2"
+  }
+}

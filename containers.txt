@@ -1,0 +1,3 @@
+GreenSauceBot
+mongo
+greensaucebot_bot_1
