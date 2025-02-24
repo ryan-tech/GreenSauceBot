@@ -12,8 +12,8 @@ Initialize .env file
 
 Ensure podman machine is running
 
-1. `$ podman machine start`
+* `$ podman machine start`
 
 Run the deploy.bat (on windows only at the moment)
 
-`$ deploy.bat`
+* `$ deploy.bat`
