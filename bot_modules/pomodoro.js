@@ -1,14 +1,5 @@
 const { MongoClient } = require('mongodb');
 const MONGO_URL = process.env.MONGO_URL;
-
-async function sendchannel.sendOrFollowUp(interaction, message) {
-    if (interaction.replied || interaction.deferred) {
-        await interaction.followUp(message);
-    } else {
-        await interaction.channel.send(message);
-    }
-}
-
 class PomodoroTimer {
     constructor(author, guildId) {
         this.Author = author;
@@ -170,7 +161,7 @@ async function pomodoroHandler(args, interaction) {
         }
     } catch (error) {
         console.error('Error handling pomodoro command:', error);
-        await sendchannel.sendOrFollowUp(interaction, 'An error occurred while handling the command.');
+        await interaction.channel.send('An error occurred while handling the command.');
     }
 }
 
