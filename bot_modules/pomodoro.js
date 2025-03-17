@@ -22,11 +22,11 @@ class PomodoroTimer {
     async start(interaction, focusTime, breakTime) {
 
         if (this.Started == true) {
-            await interaction.channel.send('Pomodoro already running! Stop the current pomodoro with `/pomodoro stop`');
+            await interaction.reply('Pomodoro already running! Stop the current pomodoro with `/pomodoro stop`');
             return;
         }
 
-        await interaction.channel.send(`<@${interaction.user.id}>, you have started a Pomodoro timer (Focus: ${focusTime} minutes, Break: ${breakTime} minutes). This will run until you stop it.`);
+        await interaction.reply(`<@${interaction.user.id}>, you have started a Pomodoro timer (Focus: ${focusTime} minutes, Break: ${breakTime} minutes). This will run until you stop it.`);
 
         this.Started = true;
         while (this.Started) {
@@ -53,11 +53,11 @@ class PomodoroTimer {
     }
     async stop(interaction) {
         if (this.Started == false) {
-            await interaction.channel.send('No pomodoro running!');
+            await interaction.reply('No pomodoro running!');
             return;
         }
         this.Started = false;
-        interaction.channel.send(`<@${interaction.user.id}>, your pomodoro timer has been stopped! You have completed ${this.TotalPomodorosCompleted} pomodoros.`);
+        interaction.reply(`<@${interaction.user.id}>, your pomodoro timer has been stopped! You have completed ${this.TotalPomodorosCompleted} pomodoros.`);
         // when the timer is stopped, I want to update the record in the database
         this.saveToDatabase();
     }
@@ -146,7 +146,7 @@ async function pomodoroHandler(args, interaction) {
             case 'stop':
                 // create a new pomodoro timer    
                 if (!pomodoroTimer) {
-                    await interaction.channel.send('No pomodoro running!');
+                    await interaction.reply('No pomodoro running!');
                     return;
                 }
                 else {
@@ -154,14 +154,14 @@ async function pomodoroHandler(args, interaction) {
                 }
                 break;
             case 'help':
-                await interaction.channel.send('Usage: /pomodoro <command: help|start|stop> <focusTime: Time in minutes> <breakTime: Time in minutes>');
+                await interaction.reply('Usage: /pomodoro <command: help|start|stop> <focusTime: Time in minutes> <breakTime: Time in minutes>');
                 break;
             default:
-                await interaction.channel.send('Unknown command. Use /pomodoro help for a list of commands.');
+                await interaction.reply('Unknown command. Use /pomodoro help for a list of commands.');
         }
     } catch (error) {
         console.error('Error handling pomodoro command:', error);
-        await interaction.channel.send('An error occurred while handling the command.');
+        await interaction.reply('An error occurred while handling the command.');
     }
 }
 
