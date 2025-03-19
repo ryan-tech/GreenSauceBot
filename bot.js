@@ -33,15 +33,16 @@ client.on(Events.InteractionCreate, async (interaction) => {
     switch (commandName) {
         case 'pomodoro':
             const subcommand = options.getSubcommand();
-            if (subcommand === 'start') {
-                const focusTime = options.getInteger('focus_time');
-                const breakTime = options.getInteger('break_time');
-                pomodoroHandler([subcommand, focusTime, breakTime], interaction);
-            } else if (subcommand === 'stop') {
-                pomodoroHandler([subcommand], interaction);
-            } else if (subcommand === 'time') {
-                pomodoroHandler([subcommand], interaction);
-            }
+            pomodoroHandler(subcommand, interaction);
+            // if (subcommand === 'start') {
+            //     // const focusTime = options.getInteger('focus_time');
+            //     // const breakTime = options.getInteger('break_time');
+            //     pomodoroHandler([subcommand, focusTime, breakTime], interaction);
+            // } else if (subcommand === 'stop') {
+            //     pomodoroHandler([subcommand], interaction);
+            // } else if (subcommand === 'time') {
+            //     pomodoroHandler([subcommand], interaction);
+            // }
             break;
         case 'joke':
             sayJoke(interaction);

@@ -41,7 +41,7 @@ class PomodoroTimer {
             if (this.Started == false) {
                 return;
             }
-            await interaction.channel.send(`<@${interaction.user.id}>, great job! You've completed ${this.TotalPomodorosCompleted} pomodoros. You may now take a break for ${breakTime} minutes. 🍵🍪`);
+            await interaction.channel.send(`<@${interaction.user.id}>, great job! You've completed ${getPomodorosCompleted(this.Author, this.GuildId) + this.TotalPomodorosCompleted} pomodoros. You may now take a break for ${breakTime} minutes. 🍵🍪`);
             this.SecondsRemaining = breakTime * 60;
             while (this.SecondsRemaining > 0 && this.Started) {
                 await new Promise(resolve => setTimeout(resolve, 1000));
@@ -57,7 +57,7 @@ class PomodoroTimer {
             return;
         }
         this.Started = false;
-        interaction.reply(`<@${interaction.user.id}>, your pomodoro timer has been stopped! You have completed ${this.TotalPomodorosCompleted} pomodoros.`);
+        interaction.reply(`<@${interaction.user.id}>, your pomodoro timer has been stopped! You have completed ${getPomodorosCompleted(this.Author, this.GuildId) + this.TotalPomodorosCompleted} pomodoros.`);
         // when the timer is stopped, I want to update the record in the database
         this.saveToDatabase();
     }
@@ -105,6 +105,32 @@ class PomodoroTimer {
     }
 }
 
+async function getPomodorosCompleted(author, guildId) {
+    try {
+        const client = new MongoClient(MONGO_URL, { useUnifiedTopology: true });
+        await client.connect();
+        const database = client.db('GreenSauceBot');
+        const collection = database.collection('pomodoro');
+        const filter = {
+            $and: [
+                { author: author },
+                { guildId: guildId }
+            ]
+        };
+        const doc = await collection.findOne(filter);
+        if (doc) {
+            return doc.data.totalPomodorosCompleted;
+        }
+        else {
+            return 0;
+        }
+    }
+    catch (error) {
+        console.error('Error getting pomodoros completed:', error);
+        return 0;
+    }
+}
+
 const pomodoroTimers = {};
 
 function getPomodoroTimer(author, guildId) {
@@ -117,19 +143,22 @@ function getPomodoroTimer(author, guildId) {
     return pomodoroTimers[author][guildId];
 }
 
-async function pomodoroHandler(args, interaction) {
+async function pomodoroHandler(subcommand, interaction) {
     try {
         const author = interaction.user.username;
         const guildId = interaction.guild.id;
         let pomodoroTimer = getPomodoroTimer(author, guildId);
 
-        // args[0] is the subcommand
-        switch (args[0]) {
+        switch (subcommand) {
             case 'start':
                 // console.log(args)
                 // Validate focusTime and breakTime
-                const focusTime = parseInt(args[1]);
-                const breakTime = parseInt(args[2]);
+                // const focusTime = parseInt(args[1]);
+                // const breakTime = parseInt(args[2]);
+
+                // default the focus time to 25 minutes and the break time to 5 minutes
+                const focusTime = 25;
+                const breakTime = 5;
 
                 // create a new pomodoro timer    
                 if (!pomodoroTimer) {
@@ -156,6 +185,26 @@ async function pomodoroHandler(args, interaction) {
             case 'help':
                 await interaction.reply('Usage: /pomodoro <command: help|start|stop> <focusTime: Time in minutes> <breakTime: Time in minutes>');
                 break;
+            case 'status':
+                if (!pomodoroTimer) {
+                    await interaction.reply(
+                        `
+                        ⋆⭒˚｡⋆ Status for ${author} in ${guildId} ⋆⭒˚｡⋆
+                        Pomodoro status: Not running
+                        Total pomodoros completed: ${await getPomodorosCompleted(author, guildId)}
+                        `
+                    );
+                }
+                else {
+                    await interaction.reply(
+                        `
+                        ⋆⭒˚｡⋆ Status for ${author} in ${guildId} ⋆⭒˚｡⋆
+                        Pomodoro status: ${pomodoroTimer.Started}
+                        Pomodoro time remaining: ${pomodoroTimer.SecondsRemaining}
+                        Total pomodoros completed: ${await getPomodorosCompleted(author, guildId)}
+                        `
+                    );
+                }
             default:
                 await interaction.reply('Unknown command. Use /pomodoro help for a list of commands.');
         }

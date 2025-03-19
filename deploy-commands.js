@@ -11,21 +11,12 @@ const commands = [
             {
                 name: 'start',
                 type: 1, // Subcommand
-                description: 'Start a Pomodoro timer',
-                options: [
-                    {
-                        name: 'focus_time',
-                        type: 4, // Integer
-                        description: 'Focus time in minutes',
-                        required: true,
-                    },
-                    {
-                        name: 'break_time',
-                        type: 4, // Integer
-                        description: 'Break time in minutes',
-                        required: true,
-                    },
-                ],
+                description: 'Start a Pomodoro timer with a focus time of 25 minutes and a break time of 5 minutes',
+            },
+            {
+                name: 'status',
+                type: 1, // Subcommand
+                description: 'Prints the status of the user',
             },
             {
                 name: 'stop',
@@ -33,10 +24,10 @@ const commands = [
                 description: 'Stop the Pomodoro timer',
             },
             {
-                name: 'time',
+                name: 'help',
                 type: 1, // Subcommand
-                description: 'Check the time remaining on the Pomodoro timer',
-            },
+                description: 'Prints the help message',
+            }
         ],
     },
     {
