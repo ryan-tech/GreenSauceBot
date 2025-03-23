@@ -3,50 +3,63 @@ const timerCache = {};
 const settings = {
     FOCUS_TIME: 25,
     BREAK_TIME: 5,
+    LONG_BREAK: 15
 }
 
-function startTimer(author, isFocusTime) {
+function startTimer(interaction, isFocusTime) {
     let timerDuration = isFocusTime ? settings.FOCUS_TIME : settings.BREAK_TIME;
     const message = isFocusTime ? 
-        `Good work! Take a break for ${settings.BREAK_TIME} minutes.` :
+        `Good work! It's time to take a break for ${settings.BREAK_TIME} minutes.` :
         `It's time to focus for ${settings.FOCUS_TIME} minutes.`;
     const timer = setTimeout(() => {
-        interaction.channel.send(`<@${author}>, ${message}`);  
-        startTimer(author, !isFocusTime);
+        interaction.channel.send(`<@${interaction.user.id}>, ${message}`);  
+        startTimer(interaction, !isFocusTime);
     }, 1000 * 60 * timerDuration);
-    timerCache[author] = timer;
+    timerCache[interaction.user.id] = timer;
 }
 
 async function pomodoroHandler(subcommand, interaction) {
     try {
-        const author = interaction.user.username;
-
+        const userId = interaction.user.id;
         switch (subcommand) {
             case 'start':
-                startTimer(author, true)
+                if (timerCache[userId]) {
+                    await interaction.reply(`<@${userId}>, Pomodoro timer is already running. Use /pomodoro stop to stop it.`);
+                    return;
+                }
+                await interaction.reply(`<@${userId}>, Pomodoro timer started. Use /pomodoro stop to stop it.`);
+                startTimer(interaction, true)
                 
                 break;
             case 'stop':
-                clearTimeout(timerCache[author]);
+                if (!timerCache[userId]) {
+                    await interaction.reply(`<@${userId}>, Pomodoro timer is not running.`);
+                    return;
+                }
+                await interaction.reply(`<@${userId}>, Pomodoro timer stopped.`);
+                clearTimeout(timerCache[userId]);
+                delete timerCache[userId];
                 break;
             case 'help':
-                await interaction.reply('Usage: /pomodoro <command: help|start|stop> <focusTime: Time in minutes> <breakTime: Time in minutes>');
+                await interaction.reply(
+                    'Use /pomodoro start to start the timer\nUse /pomodoro stop to stop the timer\nuse /pomodoro help to see this message again.'
+                );
                 break;
             case 'status':
-                if (timerCache[author]) {
-                    const remainingTime = Math.ceil((timerCache[author].getTime() - Date.now()) / 1000);
-                    await interaction.reply(`Pomodoro timer is running. Time remaining: ${remainingTime} seconds.`);
+                if (timerCache[userId]) {
+                    const remainingTime = Math.ceil((timerCache[userId]._idleStart + timerCache[userId]._idleTimeout - Date.now()) / 1000)
+                    await interaction.reply(`<@${userId}>, Pomodoro timer is running. Time remaining: ${remainingTime} seconds.`);
                 } else {
-                    await interaction.reply('Pomodoro timer is not running.');
+                    await interaction.reply(`<@${userId}>, Pomodoro timer is not running.`);
                 }
                 break;
             default:
-                await interaction.reply('Unknown command. Use /pomodoro help for a list of commands.');
+                await interaction.reply(`<@${userId}>, Unknown command. Use /pomodoro help for a list of commands.`);
                 break;
         }
     } catch (error) {
         console.error('Error handling pomodoro command:', error);
-        await interaction.channel.send('ERROR: ', error);
+        await interaction.channel.send(`<@${userId}>, ERROR ${error}`);
     }
 }
 

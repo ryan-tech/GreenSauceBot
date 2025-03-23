@@ -4,16 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node bot.js",
-    "build": "docker build -t green-sauce-bot .",
-    "deploy": "./deploy.sh",
-    "docker-run": "docker run -d green-sauce-bot",
-    "docker-restart": "docker restart green-sauce-bot",
-    "mongo-start": "docker run -d --name mongo -p 27017:27017 mongo",
-    "mongo-stop": "docker stop mongo",
-    "mongo-logs": "docker logs mongo",
-    "logs": "docker logs green-sauce-bot",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/main.js",
+    "logs": "docker logs green-sauce-bot"
   },
   "keywords": [],
   "author": "",
