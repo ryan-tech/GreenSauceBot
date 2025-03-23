@@ -3,8 +3,8 @@ require('dotenv').config();
 const TOKEN = process.env.TOKEN;
 console.log(TOKEN)
 const { deployCommands } = require('./Commands/deployCommands.js');
-const { pomodoroHandler } = require('./bot_modules/pomodoro.js');
-const { sayJoke, sayQuote, sayRiddle } = require('./bot_modules/everydayFun.js');
+const { pomodoroHandler } = require('./modules/Pomodoro/pomodoro.js');
+const { sayJoke, sayQuote, sayRiddle } = require('./modules/EverydayFun/everydayFun.js');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 
