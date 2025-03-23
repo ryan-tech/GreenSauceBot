@@ -206,7 +206,7 @@ async function pomodoroHandler(subcommand, interaction) {
         }
     } catch (error) {
         console.error('Error handling pomodoro command:', error);
-        await interaction.reply('An error occurred while handling the command.');
+        await interaction.channel.send('ERROR: ', error);
     }
 }
 
