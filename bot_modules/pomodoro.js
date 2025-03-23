@@ -151,10 +151,6 @@ async function pomodoroHandler(subcommand, interaction) {
 
         switch (subcommand) {
             case 'start':
-                // console.log(args)
-                // Validate focusTime and breakTime
-                // const focusTime = parseInt(args[1]);
-                // const breakTime = parseInt(args[2]);
 
                 // default the focus time to 25 minutes and the break time to 5 minutes
                 const focusTime = 25;

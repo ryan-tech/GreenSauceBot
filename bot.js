@@ -2,7 +2,7 @@ const { Client, GatewayIntentBits, Events } = require('discord.js');
 require('dotenv').config();
 const TOKEN = process.env.TOKEN;
 console.log(TOKEN)
-const { deployCommands } = require('./deploy-commands.js');
+const { deployCommands } = require('./Commands/deploy-commands.js');
 const { pomodoroHandler } = require('./bot_modules/pomodoro.js');
 const { sayJoke, sayQuote, sayRiddle } = require('./bot_modules/everydayFun.js');
 
@@ -34,15 +34,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
         case 'pomodoro':
             const subcommand = options.getSubcommand();
             pomodoroHandler(subcommand, interaction);
-            // if (subcommand === 'start') {
-            //     // const focusTime = options.getInteger('focus_time');
-            //     // const breakTime = options.getInteger('break_time');
-            //     pomodoroHandler([subcommand, focusTime, breakTime], interaction);
-            // } else if (subcommand === 'stop') {
-            //     pomodoroHandler([subcommand], interaction);
-            // } else if (subcommand === 'time') {
-            //     pomodoroHandler([subcommand], interaction);
-            // }
             break;
         case 'joke':
             sayJoke(interaction);
