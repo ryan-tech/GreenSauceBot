@@ -2,7 +2,10 @@
 This is a personal project by Ryan Kim. It is a discord bot that can be added to your server and allows users to use the bot as a pomodoro timer with focus and break times.
 
 ## Stack
-Node.js, mongodb, docker
+M - mongo
+E - express
+R - react
+N - 
 
 ## Setting up
 Initialize .env file
